@@ -8,7 +8,7 @@ def mean(data):
 
 def std(data):
     m = mean(data)
-    return (sum(d - m for d in data) / len(data)) ** 0.5
+    return (sum((d - m) ** 2 for d in data) / len(data)) ** 0.5
 
 
 def percentile(percent):
@@ -49,8 +49,10 @@ if __name__ == "__main__":
 
     try:
         data = pd.read_csv(args.path)
-        # delete NaNs
+
+        data = data.dropna()  # delete rows containing NaNs
         features = data.iloc[:, 6:]  # Skip non-numerical features
+
         features_data = {}
         for feature in features:
             feature_data = {}
