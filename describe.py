@@ -1,3 +1,5 @@
+#!/bin/python3
+
 from argparse import ArgumentParser
 import pandas as pd
 
@@ -43,7 +45,12 @@ if __name__ == "__main__":
         description="Create a description of a given csv dataset.",
     )
 
-    parser.add_argument("path", type=str, help="Path of the input csv dataset.")
+    parser.add_argument(
+        "path",
+        nargs="?",
+        help="Path of the input csv dataset. Defaults to 'data/dataset_train.csv'.",
+        default="data/dataset_train.csv",
+    )
 
     args = parser.parse_args()
 
