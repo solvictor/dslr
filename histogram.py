@@ -6,7 +6,7 @@ import seaborn as sns
 import os
 
 DEFAULT_LOCATION_HISTOGRAM_IMAGES = "histograms"
-
+DEFAULT_LOCATION_FILE_DATASET_TRAIN = "data/dataset_train.csv"
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -17,10 +17,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--path",
         type=str,
-        default="data/dataset_train.csv",
+        default=DEFAULT_LOCATION_FILE_DATASET_TRAIN,
         help=(
             "Path to the input CSV dataset."
-            "Defaults to 'data/dataset_train.csv' if not specified."
+            f"Defaults to '{DEFAULT_LOCATION_FILE_DATASET_TRAIN}' if not specified."
         ),
     )
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         default=DEFAULT_LOCATION_HISTOGRAM_IMAGES,
         help=(
             "Save all the histograms into png files."
-            "Defaults to 'data/dataset_train.csv' if not specified."
+            f"Defaults to '{DEFAULT_LOCATION_FILE_DATASET_TRAIN}' if not specified."
         ),
     )
 
