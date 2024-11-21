@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
+
 DEFAULT_LOCATION_HISTOGRAM_IMAGES = "histograms"
 DEFAULT_LOCATION_FILE_DATASET = "data/dataset_train.csv"
+
 
 if __name__ == "__main__":
     parser = ArgumentParser(
