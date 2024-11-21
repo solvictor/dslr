@@ -1,3 +1,6 @@
+# Project Folder
+histograms/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -17,7 +20,7 @@ eggs/
 lib/
 lib64/
 parts/
-sdist/
+sdist/DEFAULT_LOCATION_HISTOGRAM_IMAGES
 var/
 wheels/
 share/python-wheels/

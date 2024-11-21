@@ -1,7 +1,12 @@
 from argparse import ArgumentParser
+from pandas.api.types import is_float_dtype
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+
+DEFAULT_LOCATION_HISTOGRAM_IMAGES = "histograms"
+
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -19,30 +24,46 @@ if __name__ == "__main__":
         ),
     )
 
+    parser.add_argument(
+        "--save",
+        type=str,
+        default=DEFAULT_LOCATION_HISTOGRAM_IMAGES,
+        help=(
+            "Save all the histograms into png files."
+            "Defaults to 'data/dataset_train.csv' if not specified."
+        ),
+    )
+
     args = parser.parse_args()
 
     try:
         data = pd.read_csv(args.path)
         df = data.dropna()
 
-        mn_val = int(df["Arithmancy"].min())
-        mx_val = int(df["Arithmancy"].max())
+        for course in df:
+            if not is_float_dtype(df[course]):
+                continue
 
-        plt.figure(figsize=(10, 6))
-        sns.histplot(
-            data=df,
-            x="Arithmancy",
-            hue="Hogwarts House",
-            bins=range(mn_val, mx_val + int(mx_val * 0.1), 4000),
-            multiple="stack",
-            stat="frequency",
-        )
+            plt.figure("Histogram", figsize=(10, 6))
+            sns.histplot(
+                data=df,
+                x=course,
+                hue="Hogwarts House",
+                multiple="stack",
+                stat="frequency",
+            )
 
-        plt.title("Histogram of Arithmancy Scores by Hogwarts House")
-        plt.xlabel("Arithmancy Score")
-        plt.ylabel("Frequency")
+            plt.title(f"Histogram of {course} Scores by Hogwarts House")
+            plt.xlabel(f"{course} Score")
+            plt.ylabel("Frequency")
 
-        plt.show()
+            if args.save:
+                if not os.path.exists(DEFAULT_LOCATION_HISTOGRAM_IMAGES):
+                    os.makedirs(DEFAULT_LOCATION_HISTOGRAM_IMAGES)
+                plt.savefig(f"{DEFAULT_LOCATION_HISTOGRAM_IMAGES}/histplot_{course}.png")
+                plt.close()
+            else:
+                plt.show()
 
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
