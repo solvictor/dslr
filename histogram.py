@@ -8,7 +8,7 @@ import os
 
 DEFAULT_LOCATION_HISTOGRAM_IMAGES = "histograms"
 DEFAULT_LOCATION_FILE_DATASET = "data/dataset_train.csv"
-
+MOST_HOMOGENOUS_FEATURE = "Arithmancy"
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -28,10 +28,22 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--save",
+        action="store_true",
+        help=("Save all the histograms into png files."),
+    )
+
+    parser.add_argument(
+        "--show",
+        action="store_true",
+        help=("Show all the plots."),
+    )
+
+    parser.add_argument(
+        "--save-folder",
         type=str,
         default=DEFAULT_LOCATION_HISTOGRAM_IMAGES,
         help=(
-            "Save all the histograms into png files."
+            "Folder location of histograms png files."
             f"Defaults to '{DEFAULT_LOCATION_FILE_DATASET}' if not specified."
         ),
     )
@@ -46,26 +58,30 @@ if __name__ == "__main__":
             if not is_float_dtype(df[course]):
                 continue
 
-            plt.figure("Histogram", figsize=(10, 6))
-            sns.histplot(
-                data=df,
-                x=course,
-                hue="Hogwarts House",
-                multiple="stack",
-                stat="frequency",
-            )
+            if args.save or args.show or course == MOST_HOMOGENOUS_FEATURE:
+                plt.figure("Histogram", figsize=(10, 6))
+                sns.histplot(
+                    data=df,
+                    x=course,
+                    hue="Hogwarts House",
+                    multiple="stack",
+                    stat="frequency",
+                )
 
-            plt.title(f"Histogram of {course} Scores by Hogwarts House")
-            plt.xlabel(f"{course} Score")
-            plt.ylabel("Frequency")
+                plt.title(f"Histogram of {course} Scores by Hogwarts House")
+                plt.xlabel(f"{course} Score")
+                plt.ylabel("Frequency")
 
-            if args.save:
-                if not os.path.exists(DEFAULT_LOCATION_HISTOGRAM_IMAGES):
-                    os.makedirs(DEFAULT_LOCATION_HISTOGRAM_IMAGES)
-                plt.savefig(f"{DEFAULT_LOCATION_HISTOGRAM_IMAGES}/histplot_{course.lower()}.png")
-                plt.close()
-            else:
-                plt.show()
+                if args.save:
+                    if not os.path.exists(DEFAULT_LOCATION_HISTOGRAM_IMAGES):
+                        os.makedirs(DEFAULT_LOCATION_HISTOGRAM_IMAGES)
+                    plt.savefig(
+                        f"{DEFAULT_LOCATION_HISTOGRAM_IMAGES}/histplot_{course.lower()}.png"
+                    )
+                if args.show or course == MOST_HOMOGENOUS_FEATURE:
+                    plt.show()
+                else:
+                    plt.close()
 
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
