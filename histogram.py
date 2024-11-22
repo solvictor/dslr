@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from utils import validate_csv_structure, CSVValidationError
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -55,6 +56,8 @@ if __name__ == "__main__":
 
     try:
         data = pd.read_csv(args.path)
+        validate_csv_structure(data)
+
         df = data.dropna()
 
         available_courses = {
@@ -109,5 +112,7 @@ if __name__ == "__main__":
 
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
+    except CSVValidationError as ex:
+        print(f"{ex.__class__.__name__}: {ex}")
     except Exception as ex:
         print(f"Unexpected error occured : {ex}")
