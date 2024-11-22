@@ -1,13 +1,12 @@
 from argparse import ArgumentParser
-from pandas.api.types import is_float_dtype
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
 
-DEFAULT_LOCATION_HISTOGRAM_IMAGES = "histograms"
-DEFAULT_LOCATION_FILE_DATASET = "data/dataset_train.csv"
+DEFAULT_LOCATION_IMAGES = "histograms"
+DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
 MOST_HOMOGENOUS_FEATURE = "Arithmancy"
 
 
@@ -20,10 +19,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--path",
         type=str,
-        default=DEFAULT_LOCATION_FILE_DATASET,
+        default=DEFAULT_LOCATION_DATASET,
         help=(
             "Path to the input CSV dataset."
-            f"Defaults to '{DEFAULT_LOCATION_FILE_DATASET}' if not specified."
+            f"Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified."
         ),
     )
 
@@ -42,24 +41,40 @@ if __name__ == "__main__":
     parser.add_argument(
         "--save-folder",
         type=str,
-        default=DEFAULT_LOCATION_HISTOGRAM_IMAGES,
+        default=DEFAULT_LOCATION_IMAGES,
         help=(
             "Folder location of histograms png files."
-            f"Defaults to '{DEFAULT_LOCATION_FILE_DATASET}' if not specified."
+            f"Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified."
         ),
     )
 
     args = parser.parse_args()
 
-    if args.save_folder != DEFAULT_LOCATION_HISTOGRAM_IMAGES:
+    if args.save_folder != DEFAULT_LOCATION_IMAGES:
         args.save = True
 
     try:
         data = pd.read_csv(args.path)
         df = data.dropna()
 
+        available_courses = {
+            "Arithmancy",
+            "Astronomy",
+            "Herbology",
+            "Defense Against the Dark Arts",
+            "Divination",
+            "Muggle Studies",
+            "Ancient Runes",
+            "History of Magic",
+            "Transfiguration",
+            "Potions",
+            "Care of Magical Creatures",
+            "Charms",
+            "Flying",
+        }
+
         for course in df:
-            if not is_float_dtype(df[course]):
+            if course not in available_courses:
                 continue
 
             if args.save or args.show or course == MOST_HOMOGENOUS_FEATURE:
