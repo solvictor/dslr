@@ -1,3 +1,6 @@
+#!/bin/python3
+
+
 from argparse import ArgumentParser
 from utils import validate_csv_structure, CSVValidationError
 import pandas as pd

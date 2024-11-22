@@ -1,3 +1,6 @@
+#!/bin/python3
+
+
 from argparse import ArgumentParser
 from matplotlib import pyplot as plt
 from pandas.api.types import is_float_dtype
