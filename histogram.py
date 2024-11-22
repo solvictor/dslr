@@ -25,8 +25,7 @@ if __name__ == "__main__":
         type=str,
         default=DEFAULT_LOCATION_DATASET,
         help=(
-            "Path to the input CSV dataset."
-            f"Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified."
+            f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified."
         ),
     )
 
