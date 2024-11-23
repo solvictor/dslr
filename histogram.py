@@ -90,7 +90,7 @@ if __name__ == "__main__":
                     x=course,
                     hue="Hogwarts House",
                     multiple="stack",
-                    stat="frequency",
+                    stat="count",
                     palette={
                         "Gryffindor": "#7F0909",
                         "Slytherin": "#1A472A",
@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
                 plt.title(f"Histogram of {course} Scores by Hogwarts House")
                 plt.xlabel(f"{course} Score")
-                plt.ylabel("Frequency")
+                plt.ylabel("Count")
 
                 if args.save:
                     if not os.path.exists(args.save_folder):
