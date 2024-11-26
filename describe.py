@@ -3,6 +3,7 @@
 
 from argparse import ArgumentParser
 import pandas as pd
+from dslr.utils import validate_csv_structure
 
 
 def mean(data):
@@ -57,6 +58,7 @@ if __name__ == "__main__":
 
     try:
         data = pd.read_csv(args.path)
+        validate_csv_structure(data)
 
         data = data.dropna()  # delete rows containing NaNs
         features = data.iloc[:, 6:]  # Skip non-numerical features
