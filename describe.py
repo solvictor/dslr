@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
-import pandas as pd
-from sources.utils import validate_csv_structure
+from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
 
 
 def mean(data):
@@ -54,19 +53,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        data = pd.read_csv(args.path)
-        validate_csv_structure(data)
-
-        data = data.dropna()  # delete rows containing NaNs
-        features = data.iloc[:, 6:]  # Skip non-numerical features
+        data = parse_csv(args.path)
 
         features_data = {}
-        for feature in features:
+        for feature in sorted(AVAILABLE_COURSES):
             feature_data = {}
             for name, fun in FUNCTIONS.items():
                 feature_data[name] = fun(data[feature])
             features_data[feature] = feature_data
-        print(" " * 8, *features, sep=" " * 8)
+        print(" " * 8, *sorted(AVAILABLE_COURSES), sep=" " * 8)
         for name in FUNCTIONS:
             print(
                 f"{name:<8}"
@@ -75,5 +70,9 @@ if __name__ == "__main__":
                     for feature, feature_data in features_data.items()
                 )
             )
+    except FileNotFoundError:
+        print(f"Error: File '{args.path}' not found.")
+    except CSVValidationError as ex:
+        print(f"{ex.__class__.__name__}: {ex}")
     except Exception as ex:
-        print(f"Failed to open '{args.path}': {ex.__class__.__name__} {ex}")
+        print(f"Unexpected error occured : {ex}")
