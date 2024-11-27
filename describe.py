@@ -1,6 +1,3 @@
-#!/bin/python3
-
-
 from argparse import ArgumentParser
 import pandas as pd
 

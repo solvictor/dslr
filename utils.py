@@ -1,5 +1,21 @@
 import pandas as pd
-import re
+
+
+AVAILABLE_COURSES = [
+    "Arithmancy",
+    "Astronomy",
+    "Herbology",
+    "Defense Against the Dark Arts",
+    "Divination",
+    "Muggle Studies",
+    "Ancient Runes",
+    "History of Magic",
+    "Transfiguration",
+    "Potions",
+    "Care of Magical Creatures",
+    "Charms",
+    "Flying",
+]
 
 
 class CSVValidationError(Exception):
@@ -18,15 +34,6 @@ class DtypeMismatchError(CSVValidationError):
     pass
 
 
-def validate_birthday_format(df):
-    pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-
-    if not df["Birthday"].apply(lambda x: bool(pattern.match(x))).all():
-        return False
-
-    return True
-
-
 def validate_csv_values(df):
     if not df["Best Hand"].isin(["Right", "Left"]).all():
         return False
@@ -39,7 +46,6 @@ def validate_csv_values(df):
 
 def validate_csv_structure(df):
     expected_dtypes = {
-        "Index": int,
         "Hogwarts House": object,
         "First Name": object,
         "Last Name": object,
@@ -66,9 +72,6 @@ def validate_csv_structure(df):
     if not validate_csv_values(df):
         raise ValueValidationError("Invalid values found in 'Best Hand' or 'Hogwarts House'.")
 
-    if not validate_birthday_format(df):
-        raise ValueValidationError("Invalid 'Birthday' format, should be YYYY-MM-DD.")
-
     for col, dtype in expected_dtypes.items():
         if not pd.api.types.is_dtype_equal(df[col].dtype, dtype):
             raise DtypeMismatchError(
@@ -76,3 +79,10 @@ def validate_csv_structure(df):
             )
 
     return True
+
+
+def parse_csv(path):
+    data = pd.read_csv(path, index_col="Index", parse_dates=["Birthday"], date_format="%Y-%m-%d")
+    validate_csv_structure(data)
+
+    return data.dropna()

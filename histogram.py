@@ -1,9 +1,5 @@
-#!/bin/python3
-
-
 from argparse import ArgumentParser
-from utils import validate_csv_structure, CSVValidationError
-import pandas as pd
+from utils import CSVValidationError, AVAILABLE_COURSES, parse_csv
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
@@ -57,29 +53,10 @@ if __name__ == "__main__":
         args.save = True
 
     try:
-        data = pd.read_csv(args.path)
-        validate_csv_structure(data)
-
-        df = data.dropna()
-
-        available_courses = {
-            "Arithmancy",
-            "Astronomy",
-            "Herbology",
-            "Defense Against the Dark Arts",
-            "Divination",
-            "Muggle Studies",
-            "Ancient Runes",
-            "History of Magic",
-            "Transfiguration",
-            "Potions",
-            "Care of Magical Creatures",
-            "Charms",
-            "Flying",
-        }
+        df = parse_csv(args.path)
 
         for course in df:
-            if course not in available_courses:
+            if course not in AVAILABLE_COURSES:
                 continue
 
             if args.save or args.show or course == MOST_HOMOGENOUS_FEATURE:
