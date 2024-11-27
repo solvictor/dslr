@@ -22,31 +22,26 @@ if __name__ == "__main__":
         "--path",
         type=str,
         default=DEFAULT_LOCATION_DATASET,
-        help=(
-            f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified."
-        ),
+        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
     )
 
     parser.add_argument(
         "--save",
         action="store_true",
-        help=("Save all the scatter plots into png files."),
+        help="Save all the scatter plots into png files.",
     )
 
     parser.add_argument(
         "--show",
         action="store_true",
-        help=("Show all the scatter plots plots."),
+        help="Show all the scatter plots.",
     )
 
     parser.add_argument(
         "--save-folder",
         type=str,
         default=DEFAULT_LOCATION_IMAGES,
-        help=(
-            "Folder location of scatter plots png files."
-            f"Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified."
-        ),
+        help=f"Folder location of scatter plots png files. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
     )
 
     args = parser.parse_args()

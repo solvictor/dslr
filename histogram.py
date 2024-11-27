@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--show",
         action="store_true",
-        help="Show all the histograms plots.",
+        help="Show all the histograms.",
     )
 
     parser.add_argument(
