@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 import pandas as pd
-from utils import validate_csv_structure
+from sources.utils import validate_csv_structure
 
 
 def mean(data):
