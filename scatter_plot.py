@@ -4,10 +4,12 @@ from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
 from matplotlib import pyplot as plt
 import seaborn as sns
 import signal
+import os
 
 
-DEFAULT_LOCATION_IMAGES = "histograms"
+DEFAULT_LOCATION_IMAGES = "scatterplots"
 DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
+MOST_SIMILAR_FEATURES = ("Astronomy", "Defense Against the Dark Arts")
 
 
 if __name__ == "__main__":
@@ -61,21 +63,37 @@ if __name__ == "__main__":
         df = parse_csv(args.path)
 
         for first_course, second_course in combinations(sorted(AVAILABLE_COURSES), r=2):
-            plt.figure("Scatter plot", figsize=(10, 6))
-            sns.scatterplot(
-                data=df,
-                x=df[first_course],
-                y=df[second_course],
-                hue="Hogwarts House",
-            )
+            if args.save or args.show or (first_course, second_course) == MOST_SIMILAR_FEATURES:
+                plt.figure("Scatter plot", figsize=(10, 6))
+                sns.scatterplot(
+                    data=df,
+                    x=df[first_course],
+                    y=df[second_course],
+                    hue="Hogwarts House",
+                    palette={
+                        "Gryffindor": "#7F0909",
+                        "Slytherin": "#1A472A",
+                        "Hufflepuff": "#FFDB00",
+                        "Ravenclaw": "#0E1A40",
+                    },
+                )
 
-            plt.title(
-                f"Scatter plot of {first_course} against {second_course} Scores by Hogwarts House"
-            )
-            plt.xlabel(f"{first_course} Scores")
-            plt.ylabel(f"{second_course} Scores")
+                plt.title(
+                    f"Scatter plot of {first_course} against {second_course} Scores by Hogwarts House"
+                )
+                plt.xlabel(f"{first_course} Scores")
+                plt.ylabel(f"{second_course} Scores")
 
-            plt.show()
+                if args.save:
+                    if not os.path.exists(args.save_folder):
+                        os.makedirs(args.save_folder)
+                    plt.savefig(
+                        f"{args.save_folder}/scatterplot_{first_course.lower()}_{second_course.lower()}.png"
+                    )
+                if args.show or (first_course, second_course) == MOST_SIMILAR_FEATURES:
+                    plt.show()
+                else:
+                    plt.close()
 
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
