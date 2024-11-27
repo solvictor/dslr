@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from itertools import combinations
-from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
+from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
 from matplotlib import pyplot as plt
 import seaborn as sns
 import signal
@@ -65,12 +65,7 @@ if __name__ == "__main__":
                     x=df[first_course],
                     y=df[second_course],
                     hue="Hogwarts House",
-                    palette={
-                        "Gryffindor": "#7F0909",
-                        "Slytherin": "#1A472A",
-                        "Hufflepuff": "#FFDB00",
-                        "Ravenclaw": "#0E1A40",
-                    },
+                    palette=HOUSE_COLORS,
                 )
 
                 plt.title(

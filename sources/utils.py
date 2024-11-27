@@ -18,6 +18,14 @@ AVAILABLE_COURSES = [
 ]
 
 
+HOUSE_COLORS = {
+    "Gryffindor": "#D62728",
+    "Hufflepuff": "#ECB939",
+    "Ravenclaw": "#1F77B4",
+    "Slytherin": "#2CA02C",
+}
+
+
 class CSVValidationError(Exception):
     pass
 

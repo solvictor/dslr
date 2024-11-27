@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from sources.utils import CSVValidationError, AVAILABLE_COURSES, parse_csv
+from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
 import matplotlib.pyplot as plt
 import seaborn as sns
 import signal
@@ -66,12 +66,7 @@ if __name__ == "__main__":
                     hue="Hogwarts House",
                     multiple="stack",
                     stat="count",
-                    palette={
-                        "Gryffindor": "#7F0909",
-                        "Slytherin": "#1A472A",
-                        "Hufflepuff": "#FFDB00",
-                        "Ravenclaw": "#0E1A40",
-                    },
+                    palette=HOUSE_COLORS,
                 )
 
                 plt.title(f"Histogram of {course} Scores by Hogwarts House")

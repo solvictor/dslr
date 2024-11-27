@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
+from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
 from matplotlib import pyplot as plt
 import matplotlib.lines as mlines
 import seaborn as sns
@@ -67,18 +67,11 @@ if __name__ == "__main__":
 
         df = df.rename(columns=course_mapping)
 
-        house_colors = {
-            "Gryffindor": "#7F0909",
-            "Slytherin": "#1A472A",
-            "Hufflepuff": "#FFDB00",
-            "Ravenclaw": "#0E1A40",
-        }
-
         pair_plot = sns.pairplot(
             df,
             vars=[course_mapping[course] for course in sorted(AVAILABLE_COURSES)],
             hue="Hogwarts House",
-            palette=house_colors,
+            palette=HOUSE_COLORS,
             plot_kws={"alpha": 0.7, "s": 10},
         )
 
@@ -94,7 +87,7 @@ if __name__ == "__main__":
                     markersize=10,
                     label=house,
                 )
-                for house, color in house_colors.items()
+                for house, color in HOUSE_COLORS.items()
             ],
             title="Hogwarts House",
             bbox_to_anchor=(1.1, len(AVAILABLE_COURSES) + 1),
