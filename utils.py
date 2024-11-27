@@ -49,7 +49,7 @@ def validate_csv_structure(df):
         "Hogwarts House": object,
         "First Name": object,
         "Last Name": object,
-        "Birthday": object,
+        "Birthday": "datetime64[ns]",
         "Best Hand": object,
         "Arithmancy": float,
         "Astronomy": float,
@@ -74,6 +74,8 @@ def validate_csv_structure(df):
 
     for col, dtype in expected_dtypes.items():
         if not pd.api.types.is_dtype_equal(df[col].dtype, dtype):
+            if col == "Birthday":
+                raise ValueValidationError("Invalid 'Birthday' format, should be valid YYYY-MM-DD.")
             raise DtypeMismatchError(
                 f"Data type mismatch in column '{col}'. Expected {dtype}, found {df[col].dtype}."
             )

@@ -50,10 +50,7 @@ if __name__ == "__main__":
     try:
         df = parse_csv(args.path)
 
-        for course in df:
-            if course not in AVAILABLE_COURSES:
-                continue
-
+        for course in AVAILABLE_COURSES:
             if args.save or args.show or course == MOST_HOMOGENOUS_FEATURE:
                 plt.figure("Histogram", figsize=(10, 6))
 
