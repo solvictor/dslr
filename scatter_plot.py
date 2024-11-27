@@ -3,6 +3,7 @@ from itertools import combinations
 from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
 from matplotlib import pyplot as plt
 import seaborn as sns
+import signal
 
 
 DEFAULT_LOCATION_IMAGES = "histograms"
@@ -52,12 +53,14 @@ if __name__ == "__main__":
         args.save = True
 
     try:
+        signal.signal(
+            signal.SIGINT,
+            lambda *_: (print("\033[2Ddslr: CTRL+C sent by user."), exit(1)),
+        )
+
         df = parse_csv(args.path)
 
         for first_course, second_course in combinations(sorted(AVAILABLE_COURSES), r=2):
-            if first_course not in df or second_course not in df:
-                continue
-
             plt.figure("Scatter plot", figsize=(10, 6))
             sns.scatterplot(
                 data=df,
@@ -69,8 +72,9 @@ if __name__ == "__main__":
             plt.title(
                 f"Scatter plot of {first_course} against {second_course} Scores by Hogwarts House"
             )
-            plt.xlabel("Score")
-            plt.ylabel("Count")
+            plt.xlabel(f"{first_course} Scores")
+            plt.ylabel(f"{second_course} Scores")
+
             plt.show()
 
     except FileNotFoundError:

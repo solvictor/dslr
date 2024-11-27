@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 from utils import CSVValidationError, AVAILABLE_COURSES, parse_csv
 import matplotlib.pyplot as plt
 import seaborn as sns
+import signal
 import os
 
 
@@ -48,6 +49,11 @@ if __name__ == "__main__":
         args.save = True
 
     try:
+        signal.signal(
+            signal.SIGINT,
+            lambda *_: (print("\033[2Ddslr: CTRL+C sent by user."), exit(1)),
+        )
+
         df = parse_csv(args.path)
 
         for course in AVAILABLE_COURSES:
