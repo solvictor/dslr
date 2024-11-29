@@ -44,7 +44,8 @@ FUNCTIONS = {
     "Max": max,
 }
 
-if __name__ == "__main__":
+
+def parse_args():
     parser = ArgumentParser(
         prog="describe",
         description="Create a description of a given csv dataset.",
@@ -57,7 +58,11 @@ if __name__ == "__main__":
         default="data/dataset_train.csv",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
 
     try:
         data = pd.read_csv(args.path)
@@ -84,3 +89,7 @@ if __name__ == "__main__":
         print(f"{ex.__class__.__name__}: {ex}")
     except Exception as ex:
         print(f"Unexpected error occured : {ex}")
+
+
+if __name__ == "__main__":
+    main()

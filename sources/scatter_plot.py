@@ -12,7 +12,7 @@ DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
 MOST_SIMILAR_FEATURES = ("Astronomy", "Defense Against the Dark Arts")
 
 
-if __name__ == "__main__":
+def parse_args():
     parser = ArgumentParser(
         prog="scatter_plot",
         description="Plot scatter plots of each Hogwarts course scores against another course, for each house.",
@@ -44,7 +44,11 @@ if __name__ == "__main__":
         help=f"Folder location of scatter plots png files. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
 
     if args.save_folder != DEFAULT_LOCATION_IMAGES:
         args.save = True
@@ -91,3 +95,7 @@ if __name__ == "__main__":
         print(f"{ex.__class__.__name__}: {ex}")
     except Exception as ex:
         print(f"Unexpected error occured : {ex}")
+
+
+if __name__ == "__main__":
+    main()
