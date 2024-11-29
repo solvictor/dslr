@@ -66,6 +66,7 @@ def main():
 
     try:
         data = parse_csv(args.input_file)
+
         X = np.array(data[AVAILABLE_COURSES].values)
         X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 
@@ -74,7 +75,6 @@ def main():
         biases = model_data["biases"]
 
         predictions = predict(X, weights, biases)
-
         predicted_houses = [
             {0: "Gryffindor", 1: "Hufflepuff", 2: "Ravenclaw", 3: "Slytherin"}[pred]
             for pred in predictions
@@ -88,8 +88,7 @@ def main():
 
         print(f"Predictions saved to {args.output_file}")
         if args.verbose:
-            accuracy = (
-                np.mean(
+            print(f"Accuracy: {np.mean(
                     predictions
                     == (
                         data["Hogwarts House"]
@@ -97,9 +96,7 @@ def main():
                         .values
                     )
                 )
-                * 100
-            )
-            print(f"Accuracy: {accuracy}%")
+                * 100}%")
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
     except CSVValidationError as ex:
