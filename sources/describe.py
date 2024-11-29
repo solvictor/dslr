@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 import pandas as pd
-from sources.utils import CSVValidationError
+from utils import CSVValidationError
 
 
 def mean(data):
@@ -16,13 +16,12 @@ def std(data):
 
 def percentile(percent):
     def inside(data):
-        data = [e for e in data if not pd.isna(e)]
-        data_sorted = sorted(data)
-        rank = (len(data) - 1) * percent / 100
+        data_sorted = sorted(e for e in data if not pd.isna(e))
+        rank = (len(data_sorted) - 1) * percent / 100
         lower_index = int(rank)
         upper_index = lower_index + 1
         lower_value = data_sorted[lower_index]
-        upper_value = data_sorted[upper_index] if upper_index < len(data) else lower_value
+        upper_value = data_sorted[upper_index] if upper_index < len(data_sorted) else lower_value
         quantile_value = lower_value + (upper_value - lower_value) * (rank - lower_index)
 
         return quantile_value
@@ -63,7 +62,7 @@ if __name__ == "__main__":
     try:
         data = pd.read_csv(args.path)
 
-        features = []  # TODO Only numerical
+        features = data.select_dtypes(include="number")
         features_data = {}
         for feature in features:
             feature_data = {}

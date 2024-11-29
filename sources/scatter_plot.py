@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from itertools import combinations
-from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
+from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
 from matplotlib import pyplot as plt
 import seaborn as sns
 import signal

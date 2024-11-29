@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
+from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
 import matplotlib.pyplot as plt
 import seaborn as sns
 import signal
