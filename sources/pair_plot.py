@@ -16,7 +16,7 @@ import os
 DEFAULT_LOCATION_IMAGES = "pair_plot"
 
 
-if __name__ == "__main__":
+def parse_args():
     parser = ArgumentParser(
         prog="pair_plot",
         description="Pair plot of Hogwarts course scores for each house.",
@@ -42,7 +42,11 @@ if __name__ == "__main__":
         help=f"Folder location of pair plots png files. Defaults to '{DEFAULT_LOCATION_IMAGES}' if not specified.",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
 
     if args.save_folder != DEFAULT_LOCATION_IMAGES:
         args.save = True
@@ -120,3 +124,7 @@ if __name__ == "__main__":
         print(f"{ex.__class__.__name__}: {ex}")
     except Exception as ex:
         print(f"Unexpected error occurred: {ex}")
+
+
+if __name__ == "__main__":
+    main()
