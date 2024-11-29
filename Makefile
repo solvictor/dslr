@@ -4,5 +4,8 @@ clean:
 install:
 	python -r requirements.txt
 
-# TODO run rule with logtrain and logpredict
-# TODO units tests for describe and the accuracy
+run:
+	@python sources/logreg_train.py
+	@python sources/logreg_predict.py --model-file weights.pkl --verbose
+
+# TODO units tests for describe and the accuracy with pytest
