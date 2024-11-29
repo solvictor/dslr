@@ -1,5 +1,51 @@
-from utils import parse_csv, AVAILABLE_COURSES
+from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, DEFAULT_LOCATION_DATASET
+from argparse import ArgumentParser
 import numpy as np
+import pickle
+
+
+NUMBER_OF_HOUSES = 4
+DEFAULT_LOCATION_JSON = "weights.pkl"
+
+
+def parse_args():
+    parser = ArgumentParser(
+        prog="logreg_train",
+        description="Train a logistic regression model using One-vs-Rest (OvR) method.",
+    )
+
+    parser.add_argument(
+        "--epochs", type=int, default=10_000, help="Number of epochs for training the model."
+    )
+
+    parser.add_argument(
+        "--learning_rate",
+        type=float,
+        default=0.001,
+        help="Learning rate to use for gradient descent.",
+    )
+
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        default=DEFAULT_LOCATION_DATASET,
+        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
+    )
+
+    parser.add_argument(
+        "--output_file",
+        type=str,
+        default=DEFAULT_LOCATION_JSON,
+        help=f"Path to the output JSON file where model weights and biases will be saved. Defaults to '{DEFAULT_LOCATION_JSON}' if not specified.",
+    )
+
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="If set, enables verbose mode for debugging purposes.",
+    )
+
+    return parser.parse_args()
 
 
 def sigmoid(z):
@@ -26,7 +72,7 @@ def gradient_descent_binary(X, y, weights, bias, learning_rate, epochs):
     return weights, bias
 
 
-def train_logistic_regression_ovr(X, y, num_classes, learning_rate=0.01, epochs=10000):
+def train_logistic_regression_ovr(X, y, num_classes, learning_rate, epochs):
     n_features = X.shape[1]
 
     all_weights = np.zeros((num_classes, n_features))
@@ -46,30 +92,44 @@ def train_logistic_regression_ovr(X, y, num_classes, learning_rate=0.01, epochs=
     return all_weights, all_biases
 
 
-# def predict_ovr(X, all_weights, all_biases):
-#     scores = np.dot(X, all_weights.T) + all_biases
-#     y_pred = sigmoid(scores)
+def save_model_to_pickle(weights, biases, output_file):
+    model_data = {
+        "weights": weights,
+        "biases": biases,
+    }
 
-#     return np.argmax(y_pred, axis=1)
+    with open(output_file, "wb") as f:
+        pickle.dump(model_data, f)
 
 
-data = parse_csv("data/dataset_train.csv")
+def main():
+    args = parse_args()
 
-X = np.array(data[AVAILABLE_COURSES].values)
+    try:
+        data = parse_csv(args.input_file)
 
-houses = {"Gryffindor": 0, "Slytherin": 1, "Hufflepuff": 2, "Ravenclaw": 3}
-y = data["Hogwarts House"].map(houses).values
+        X = np.array(data[AVAILABLE_COURSES].values)
 
-X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
+        y = (
+            data["Hogwarts House"]
+            .map({"Gryffindor": 0, "Slytherin": 1, "Hufflepuff": 2, "Ravenclaw": 3})
+            .values
+        )
 
-num_classes = 4
-all_weights, all_biases = train_logistic_regression_ovr(
-    X, y, num_classes, learning_rate=0.01, epochs=10_000
-)
+        X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 
-print(all_weights, all_biases)
+        all_weights, all_biases = train_logistic_regression_ovr(
+            X, y, NUMBER_OF_HOUSES, args.learning_rate, args.epochs
+        )
 
-# predictions = predict_ovr(X, all_weights, all_biases)
+        save_model_to_pickle(all_weights, all_biases, args.output_file)
+    except FileNotFoundError:
+        print(f"Error: File '{args.path}' not found.")
+    except CSVValidationError as ex:
+        print(f"{ex.__class__.__name__}: {ex}")
+    except Exception as ex:
+        print(f"Unexpected error occured : {ex}")
 
-# accuracy = np.mean(predictions == y) * 100
-# print(f"Accuracy: {accuracy}%")
+
+if __name__ == "__main__":
+    main()

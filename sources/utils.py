@@ -1,6 +1,8 @@
 import pandas as pd
 
 
+DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
+
 AVAILABLE_COURSES = [
     "Arithmancy",
     "Astronomy",
@@ -16,7 +18,6 @@ AVAILABLE_COURSES = [
     "Charms",
     "Flying",
 ]
-
 
 HOUSE_COLORS = {
     "Gryffindor": "#D62728",

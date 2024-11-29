@@ -1,5 +1,11 @@
 from argparse import ArgumentParser
-from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
+from utils import (
+    parse_csv,
+    CSVValidationError,
+    AVAILABLE_COURSES,
+    HOUSE_COLORS,
+    DEFAULT_LOCATION_DATASET,
+)
 from matplotlib import pyplot as plt
 import matplotlib.lines as mlines
 import seaborn as sns
@@ -8,7 +14,6 @@ import os
 
 
 DEFAULT_LOCATION_IMAGES = "pair_plot"
-DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
 
 
 if __name__ == "__main__":

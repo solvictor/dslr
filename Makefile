@@ -1,5 +1,5 @@
 clean:
-	rm -rf __pycache__ sources/__pycache__
+	rm -rf __pycache__ sources/__pycache__ houses.csv weights.pkl
 
 install:
 	python -r requirements.txt

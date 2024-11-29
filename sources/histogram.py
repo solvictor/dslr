@@ -1,5 +1,11 @@
 from argparse import ArgumentParser
-from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
+from utils import (
+    parse_csv,
+    CSVValidationError,
+    AVAILABLE_COURSES,
+    HOUSE_COLORS,
+    DEFAULT_LOCATION_DATASET,
+)
 import matplotlib.pyplot as plt
 import seaborn as sns
 import signal
@@ -7,7 +13,6 @@ import os
 
 
 DEFAULT_LOCATION_IMAGES = "histograms"
-DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
 MOST_HOMOGENOUS_FEATURE = "Arithmancy"
 
 

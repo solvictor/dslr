@@ -1,6 +1,12 @@
 from argparse import ArgumentParser
 from itertools import combinations
-from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, HOUSE_COLORS
+from utils import (
+    parse_csv,
+    CSVValidationError,
+    AVAILABLE_COURSES,
+    HOUSE_COLORS,
+    DEFAULT_LOCATION_DATASET,
+)
 from matplotlib import pyplot as plt
 import seaborn as sns
 import signal
@@ -8,7 +14,6 @@ import os
 
 
 DEFAULT_LOCATION_IMAGES = "scatterplots"
-DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
 MOST_SIMILAR_FEATURES = ("Astronomy", "Defense Against the Dark Arts")
 
 
