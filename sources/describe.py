@@ -8,10 +8,18 @@ def mean(data):
     return sum(e for e in data if not pd.isna(e)) / n
 
 
-def std(data):
+def var(data):
     m = mean(data)
     n = count(data)
-    return (sum((d - m) ** 2 for d in data if not pd.isna(d)) / n) ** 0.5
+    return sum((d - m) ** 2 for d in data if not pd.isna(d)) / n
+
+
+def std(data):
+    return var(data) ** 0.5
+
+
+def ptp(data):
+    return max(data) - min(data)
 
 
 def percentile(percent):
@@ -42,6 +50,8 @@ FUNCTIONS = {
     "50%": percentile(50),
     "75%": percentile(75),
     "Max": max,
+    "Var": var,
+    "PtP": ptp,
 }
 
 
