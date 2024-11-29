@@ -88,7 +88,8 @@ def main():
 
         print(f"Predictions saved to {args.output_file}")
         if args.verbose:
-            print(f"Accuracy: {np.mean(
+            print(f"""Accuracy: {(
+                np.mean(
                     predictions
                     == (
                         data["Hogwarts House"]
@@ -96,7 +97,8 @@ def main():
                         .values
                     )
                 )
-                * 100}%")
+                * 100
+            )}""")
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
     except CSVValidationError as ex:
