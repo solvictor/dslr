@@ -1,18 +1,22 @@
 from argparse import ArgumentParser
-from sources.utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
+import pandas as pd
+from sources.utils import CSVValidationError
 
 
 def mean(data):
-    return sum(data) / len(data)
+    n = count(data)
+    return sum(e for e in data if not pd.isna(e)) / n
 
 
 def std(data):
     m = mean(data)
-    return (sum((d - m) ** 2 for d in data) / len(data)) ** 0.5
+    n = count(data)
+    return (sum((d - m) ** 2 for d in data if not pd.isna(d)) / n) ** 0.5
 
 
 def percentile(percent):
     def inside(data):
+        data = [e for e in data if not pd.isna(e)]
         data_sorted = sorted(data)
         rank = (len(data) - 1) * percent / 100
         lower_index = int(rank)
@@ -26,8 +30,12 @@ def percentile(percent):
     return inside
 
 
+def count(data):
+    return sum(not pd.isna(e) for e in data)
+
+
 FUNCTIONS = {
-    "Count": len,
+    "Count": count,
     "Mean": mean,
     "Std": std,
     "Min": min,
@@ -53,15 +61,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        data = parse_csv(args.path)
+        data = pd.read_csv(args.path)
 
+        features = []  # TODO Only numerical
         features_data = {}
-        for feature in sorted(AVAILABLE_COURSES):
+        for feature in features:
             feature_data = {}
             for name, fun in FUNCTIONS.items():
                 feature_data[name] = fun(data[feature])
             features_data[feature] = feature_data
-        print(" " * 8, *sorted(AVAILABLE_COURSES), sep=" " * 8)
+        print(" " * 8, *features, sep=" " * 8)
         for name in FUNCTIONS:
             print(
                 f"{name:<8}"
