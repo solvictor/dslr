@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-DEFAULT_LOCATION_DATASET = "data/dataset_train.csv"
+DEFAULT_LOCATION_DATASET_TRAIN = "data/dataset_train.csv"
 
 AVAILABLE_COURSES = [
     "Arithmancy",
@@ -43,9 +43,12 @@ class DtypeMismatchError(CSVValidationError):
     pass
 
 
-def validate_csv_values(df):
+def validate_csv_values(df, predict):
     if not df["Best Hand"].isin(["Right", "Left"]).all():
         return False
+
+    if predict:
+        return True
 
     if not df["Hogwarts House"].isin(["Gryffindor", "Ravenclaw", "Slytherin", "Hufflepuff"]).all():
         return False
@@ -53,7 +56,7 @@ def validate_csv_values(df):
     return True
 
 
-def validate_csv_structure(df):
+def validate_csv_structure(df, predict):
     expected_dtypes = {
         "Hogwarts House": object,
         "First Name": object,
@@ -75,10 +78,12 @@ def validate_csv_structure(df):
         "Flying": float,
     }
 
+    if predict:
+        expected_dtypes.pop("Hogwarts House")
+
     if list(df.columns) != list(expected_dtypes.keys()):
         raise ColumnMismatchError("Column names do not match the expected structure.")
-
-    if not validate_csv_values(df):
+    if not validate_csv_values(df, predict):
         raise ValueValidationError("Invalid values found in 'Best Hand' or 'Hogwarts House'.")
 
     for col, dtype in expected_dtypes.items():
@@ -92,8 +97,10 @@ def validate_csv_structure(df):
     return True
 
 
-def parse_csv(path):
+def parse_csv(path, predict=False):
     data = pd.read_csv(path, index_col="Index", parse_dates=["Birthday"], date_format="%Y-%m-%d")
-    validate_csv_structure(data)
+    if predict:
+        data = data.drop(columns="Hogwarts House")
+    validate_csv_structure(data, predict)
 
     return data.dropna()

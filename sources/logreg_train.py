@@ -45,9 +45,9 @@ def parse_args():
         help="If set, enables verbose mode for debugging purposes.",
     )
 
-    # TODO Implement
     parser.add_argument(
-        "--stochastic",
+        "--optimizer",
+        # choices=["GD", "Mini-Batch GD"]
         action="store_true",
         help="If set, uses a stochastic gradient descent algorithm.",
     )

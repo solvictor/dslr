@@ -4,7 +4,7 @@ from utils import (
     CSVValidationError,
     AVAILABLE_COURSES,
     HOUSE_COLORS,
-    DEFAULT_LOCATION_DATASET,
+    DEFAULT_LOCATION_DATASET_TRAIN,
 )
 from matplotlib import pyplot as plt
 import matplotlib.lines as mlines
@@ -25,8 +25,8 @@ def parse_args():
     parser.add_argument(
         "--path",
         type=str,
-        default=DEFAULT_LOCATION_DATASET,
-        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
+        default=DEFAULT_LOCATION_DATASET_TRAIN,
+        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET_TRAIN}' if not specified.",
     )
 
     parser.add_argument(

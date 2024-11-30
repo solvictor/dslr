@@ -4,7 +4,7 @@ from utils import (
     CSVValidationError,
     AVAILABLE_COURSES,
     HOUSE_COLORS,
-    DEFAULT_LOCATION_DATASET,
+    DEFAULT_LOCATION_DATASET_TRAIN,
 )
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -25,8 +25,8 @@ def parse_args():
     parser.add_argument(
         "--path",
         type=str,
-        default=DEFAULT_LOCATION_DATASET,
-        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
+        default=DEFAULT_LOCATION_DATASET_TRAIN,
+        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET_TRAIN}' if not specified.",
     )
 
     parser.add_argument(
@@ -45,7 +45,7 @@ def parse_args():
         "--save-folder",
         type=str,
         default=DEFAULT_LOCATION_IMAGES,
-        help=f"Folder location of histograms png files. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
+        help=f"Folder location of histograms png files. Defaults to '{DEFAULT_LOCATION_DATASET_TRAIN}' if not specified.",
     )
 
     return parser.parse_args()
