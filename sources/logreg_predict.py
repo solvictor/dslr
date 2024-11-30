@@ -68,8 +68,6 @@ def main():
     try:
         data = parse_csv(args.input_file, predict=True)
 
-        print(data)
-
         X = np.array(data[AVAILABLE_COURSES].values)
         X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 

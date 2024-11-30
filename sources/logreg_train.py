@@ -135,6 +135,8 @@ def main():
         )
 
         save_model_to_pickle(weights, biases, args.output_file)
+        print(f"Weights/biases saved to {args.output_file}")
+
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
     except CSVValidationError as ex:
