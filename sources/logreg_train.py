@@ -1,4 +1,4 @@
-from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, DEFAULT_LOCATION_DATASET
+from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, DEFAULT_LOCATION_DATASET_TRAIN
 from argparse import ArgumentParser
 import numpy as np
 import pickle
@@ -28,8 +28,8 @@ def parse_args():
     parser.add_argument(
         "--input-file",
         type=str,
-        default=DEFAULT_LOCATION_DATASET,
-        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
+        default=DEFAULT_LOCATION_DATASET_TRAIN,
+        help=f"Path to the input CSV dataset. Defaults to '{DEFAULT_LOCATION_DATASET_TRAIN}' if not specified.",
     )
 
     parser.add_argument(
@@ -47,9 +47,9 @@ def parse_args():
 
     parser.add_argument(
         "--optimizer",
-        # choices=["GD", "Mini-Batch GD"]
-        action="store_true",
-        help="If set, uses a stochastic gradient descent algorithm.",
+        choices=["gd", "minibatch", "sgd"],
+        default="gd",
+        help="Choose the optimization method: 'gd' for full batch gradient descent, 'minibatch' for mini-batch gradient descent, or 'sgd' for stochastic gradient descent.",
     )
 
     return parser.parse_args()
