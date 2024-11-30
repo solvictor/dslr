@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
 import pandas as pd
-from utils import CSVValidationError
+
+
+DDOF = 1
 
 
 def mean(data):
@@ -10,7 +12,7 @@ def mean(data):
 
 def var(data):
     m = mean(data)
-    n = count(data) - 1
+    n = count(data) - DDOF
     return sum((d - m) ** 2 for d in data if not pd.isna(d)) / n
 
 
@@ -99,10 +101,9 @@ def main():
                 + "\n"
             )
         print(end=formatted)
+
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
-    except CSVValidationError as ex:
-        print(f"{ex.__class__.__name__}: {ex}")
     except Exception as ex:
         print(f"Unexpected error occured : {ex}")
 
