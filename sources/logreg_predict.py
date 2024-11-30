@@ -1,10 +1,11 @@
-from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES, DEFAULT_LOCATION_DATASET
+from utils import parse_csv, CSVValidationError, AVAILABLE_COURSES
 import pickle
 import numpy as np
 import argparse
 import csv
 
 
+DEFAULT_LOCATION_DATASET_TEST = "data/dataset_test.csv"
 DEFAULT_OUTPUT_PREDICTION = "houses.csv"
 
 
@@ -42,8 +43,8 @@ def parse_args():
     parser.add_argument(
         "--input-file",
         type=str,
-        default=DEFAULT_LOCATION_DATASET,
-        help=f"Path to the input dataset (CSV format) for making predictions. Defaults to '{DEFAULT_LOCATION_DATASET}' if not specified.",
+        default=DEFAULT_LOCATION_DATASET_TEST,
+        help=f"Path to the input dataset (CSV format) for making predictions. Defaults to '{DEFAULT_LOCATION_DATASET_TEST}' if not specified.",
     )
 
     parser.add_argument(
@@ -65,7 +66,9 @@ def main():
     args = parse_args()
 
     try:
-        data = parse_csv(args.input_file)
+        data = parse_csv(args.input_file, predict=True)
+
+        print(data)
 
         X = np.array(data[AVAILABLE_COURSES].values)
         X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
@@ -87,18 +90,7 @@ def main():
                 writer.writerow([i, house])
 
         print(f"Predictions saved to {args.output_file}")
-        if args.verbose:
-            print(f"""Accuracy: {(
-                np.mean(
-                    predictions
-                    == (
-                        data["Hogwarts House"]
-                        .map({"Gryffindor": 0, "Slytherin": 1, "Hufflepuff": 2, "Ravenclaw": 3})
-                        .values
-                    )
-                )
-                * 100
-            )}""")
+
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
     except CSVValidationError as ex:
