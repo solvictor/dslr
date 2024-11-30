@@ -64,6 +64,12 @@ def main():
         data = parse_csv(args.input_file, predict=True)
 
         X = np.array(data[AVAILABLE_COURSES].values)
+
+        # Replace NaN values with mean of courses, so after it will be 0 in the normalized vector X with standardization
+        nan_mask = np.isnan(X)
+        mean_values = np.nanmean(X, axis=0)
+        X[nan_mask] = np.take(mean_values, np.where(nan_mask)[1])
+
         X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 
         model_data = load_model_from_pickle(args.model_file)
@@ -72,7 +78,7 @@ def main():
 
         predictions = predict(X, weights, biases)
         predicted_houses = [
-            {0: "Gryffindor", 1: "Hufflepuff", 2: "Ravenclaw", 3: "Slytherin"}[pred]
+            {0: "Gryffindor", 1: "Slytherin", 2: "Hufflepuff", 3: "Ravenclaw"}[pred]
             for pred in predictions
         ]
 

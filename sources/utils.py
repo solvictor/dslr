@@ -103,4 +103,4 @@ def parse_csv(path, predict=False):
         data = data.drop(columns="Hogwarts House")
     validate_csv_structure(data, predict)
 
-    return data.dropna()
+    return data if predict else data.dropna()
