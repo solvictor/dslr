@@ -84,15 +84,20 @@ def main():
             for name, fun in FUNCTIONS.items():
                 feature_data[name] = fun(data[feature])
             features_data[feature] = feature_data
-        print(" " * 8, *features, sep=" " * 8)
+
+        SPACING = 8
+        SPACES = " " * SPACING
+        formatted = SPACES * 2 + SPACES.join(features) + "\n"
         for name in FUNCTIONS:
-            print(
-                f"{name:<8}"
+            formatted += (
+                "{:<{}}".format(name, SPACING)
                 + "".join(
-                    "{:>{}.6f}".format(feature_data[name], 8 + len(feature))
+                    "{:>{}.6f}".format(feature_data[name], SPACING + len(feature))
                     for feature, feature_data in features_data.items()
                 )
+                + "\n"
             )
+        print(end=formatted)
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
     except CSVValidationError as ex:
