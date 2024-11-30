@@ -8,6 +8,10 @@ NUMBER_OF_HOUSES = 4
 DEFAULT_LOCATION_JSON = "weights.pkl"
 
 
+constant = lambda x: lambda _: x  # noqa: E731
+OPTIMIZERS_BATCH_SIZE = {"minibatch": constant(64), "gd": len, "sgd": constant(1)}
+
+
 def parse_args():
     parser = ArgumentParser(
         prog="logreg_train",
@@ -127,11 +131,15 @@ def main():
             .map({"Gryffindor": 0, "Slytherin": 1, "Hufflepuff": 2, "Ravenclaw": 3})
             .values
         )
-
         X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 
         weights, biases = train_logistic_regression_ovr(
-            X, y, NUMBER_OF_HOUSES, args.learning_rate, args.epochs, 64
+            X,
+            y,
+            NUMBER_OF_HOUSES,
+            args.learning_rate,
+            args.epochs,
+            OPTIMIZERS_BATCH_SIZE[args.optimizer](X),
         )
 
         save_model_to_pickle(weights, biases, args.output_file)
