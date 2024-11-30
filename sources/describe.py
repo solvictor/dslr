@@ -10,7 +10,7 @@ def mean(data):
 
 def var(data):
     m = mean(data)
-    n = count(data)
+    n = count(data) - 1
     return sum((d - m) ** 2 for d in data if not pd.isna(d)) / n
 
 
