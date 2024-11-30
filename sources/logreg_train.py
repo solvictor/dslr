@@ -15,7 +15,7 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--epochs", type=int, default=10_000, help="Number of epochs for training the model."
+        "--epochs", type=int, default=1_000, help="Number of epochs for training the model."
     )
 
     parser.add_argument(
@@ -63,23 +63,27 @@ def compute_cost(y, y_pred):
     return -(1 / len(y)) * np.sum(y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred))
 
 
-def gradient_descent_binary(X, y, weights, bias, learning_rate, epochs):
+def gradient_descent_binary(X, y, weights, bias, learning_rate, epochs, batch):
     m = X.shape[0]
 
     for i in range(epochs):
-        z = np.dot(X, weights) + bias
-        y_pred = sigmoid(z)
+        for j in range(0, m, batch):
+            X_batch = X[j : j + batch]
+            y_batch = y[j : j + batch]
 
-        dw = (1 / m) * np.dot(X.T, (y_pred - y))
-        db = (1 / m) * np.sum(y_pred - y)
+            z = np.dot(X_batch, weights) + bias
+            y_pred = sigmoid(z)
 
-        weights -= learning_rate * dw
-        bias -= learning_rate * db
+            dw = np.dot(X_batch.T, (y_pred - y_batch)) / batch
+            db = np.sum(y_pred - y_batch) / batch
+
+            weights -= learning_rate * dw
+            bias -= learning_rate * db
 
     return weights, bias
 
 
-def train_logistic_regression_ovr(X, y, num_classes, learning_rate, epochs):
+def train_logistic_regression_ovr(X, y, num_classes, learning_rate, epochs, batch):
     n_features = X.shape[1]
 
     all_weights = np.zeros((num_classes, n_features))
@@ -91,7 +95,9 @@ def train_logistic_regression_ovr(X, y, num_classes, learning_rate, epochs):
         weights = np.zeros(n_features)
         bias = 0
 
-        weights, bias = gradient_descent_binary(X, binary_y, weights, bias, learning_rate, epochs)
+        weights, bias = gradient_descent_binary(
+            X, binary_y, weights, bias, learning_rate, epochs, batch
+        )
 
         all_weights[i:] = weights
         all_biases[i] = bias
@@ -116,7 +122,6 @@ def main():
         data = parse_csv(args.input_file)
 
         X = np.array(data[AVAILABLE_COURSES].values)
-
         y = (
             data["Hogwarts House"]
             .map({"Gryffindor": 0, "Slytherin": 1, "Hufflepuff": 2, "Ravenclaw": 3})
@@ -125,11 +130,11 @@ def main():
 
         X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 
-        all_weights, all_biases = train_logistic_regression_ovr(
-            X, y, NUMBER_OF_HOUSES, args.learning_rate, args.epochs
+        weights, biases = train_logistic_regression_ovr(
+            X, y, NUMBER_OF_HOUSES, args.learning_rate, args.epochs, 64
         )
 
-        save_model_to_pickle(all_weights, all_biases, args.output_file)
+        save_model_to_pickle(weights, biases, args.output_file)
     except FileNotFoundError:
         print(f"Error: File '{args.path}' not found.")
     except CSVValidationError as ex:
