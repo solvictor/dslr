@@ -53,11 +53,6 @@ def parse_args():
         default=DEFAULT_OUTPUT_PREDICTION,
         help=f"Path to the output file where predictions will be saved. Defaults to '{DEFAULT_OUTPUT_PREDICTION}' if not specified.",
     )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="If set, enables verbose mode for debugging purposes.",
-    )
 
     return parser.parse_args()
 

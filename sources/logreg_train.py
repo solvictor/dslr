@@ -44,12 +44,6 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="If set, enables verbose mode for debugging purposes.",
-    )
-
-    parser.add_argument(
         "--optimizer",
         choices=["gd", "minibatch", "sgd"],
         default="gd",
@@ -103,7 +97,7 @@ def train_logistic_regression_ovr(X, y, num_classes, learning_rate, epochs, batc
             X, binary_y, weights, bias, learning_rate, epochs, batch
         )
 
-        all_weights[i:] = weights
+        all_weights[i] = weights
         all_biases[i] = bias
 
     return all_weights, all_biases
