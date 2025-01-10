@@ -80,7 +80,7 @@ def main():
         data = pd.read_csv(args.path)
 
         features = data.select_dtypes(include="number")
-        del features["Index"]
+        # del features["Index"]
         features_data = {}
         for feature in features:
             feature_data = {}

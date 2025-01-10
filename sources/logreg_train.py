@@ -64,7 +64,7 @@ def compute_cost(y, y_pred):
 def gradient_descent_binary(X, y, weights, bias, learning_rate, epochs, batch):
     m = X.shape[0]
 
-    for i in range(epochs):
+    for _ in range(epochs):
         for j in range(0, m, batch):
             X_batch = X[j : j + batch]
             y_batch = y[j : j + batch]
