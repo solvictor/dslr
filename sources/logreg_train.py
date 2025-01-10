@@ -57,10 +57,6 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def compute_cost(y, y_pred):
-    return -(1 / len(y)) * np.sum(y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred))
-
-
 def gradient_descent_binary(X, y, weights, bias, learning_rate, epochs, batch):
     m = X.shape[0]
 
